@@ -5,13 +5,15 @@ import { Admins } from './admins.model';
 
 @Injectable()
 export class AdminsService {
-
-  constructor(@InjectModel('Admin') private readonly adminModel: Model<Admins>) {
-  }
+  constructor(
+    @InjectModel('Admin') private readonly adminModel: Model<Admins>,
+  ) {}
 
   async insertAdmin(username: string, userId: string) {
     const admins = await this.getAllAdmins();
-    const isAlreadyAdded = admins.find((admin) => admin.username === username || admin.userId === userId);
+    const isAlreadyAdded = admins.find(
+      (admin) => admin.username === username || admin.userId === userId,
+    );
     if (isAlreadyAdded !== undefined) {
       return 'already added';
     }

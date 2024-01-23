@@ -107,7 +107,7 @@ export class CrudService {
     const user = await Instagram.login('', '');
 
     if (user === LOGIN_ERROR) {
-      return await this.replyAndAnswer(ctx, '❌ <i>ERROR WHILE LOGIN</i>')
+      return await this.replyAndAnswer(ctx, '❌ <i>ERROR WHILE LOGIN</i>');
     }
 
     const link = await Instagram.getImageProfile(

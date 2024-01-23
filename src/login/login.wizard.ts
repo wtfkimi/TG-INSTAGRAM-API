@@ -19,7 +19,7 @@ export class LoginWizard {
     await ctx.reply('🔐 <b>Enter your password</b>', { parse_mode: 'HTML' });
     if (ctx.message) {
       this.username = ctx.message['text'];
-    }else {
+    } else {
       await ctx.reply(
         '❌ <i>ERROR: please write correct login. Repeat action "Login" to correct login</i>',
         { parse_mode: 'HTML' },

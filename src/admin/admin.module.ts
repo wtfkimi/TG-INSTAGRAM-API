@@ -11,6 +11,13 @@ import { RemoveAdminDbAccWizard } from './wizards/removeAdminDbAcc';
 @Module({
   controllers: [],
   imports: [AccountsModule, AdminsModule],
-  providers: [AdminService, AdminController, AddAccountWizard, DeleteAccountWizard, InsertAdminDbAccWizard, RemoveAdminDbAccWizard],
+  providers: [
+    AdminService,
+    AdminController,
+    AddAccountWizard,
+    DeleteAccountWizard,
+    InsertAdminDbAccWizard,
+    RemoveAdminDbAccWizard,
+  ],
 })
 export class AdminModule {}
