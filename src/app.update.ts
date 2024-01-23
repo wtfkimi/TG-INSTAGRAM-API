@@ -1,9 +1,5 @@
 import { AppService } from './app.service';
-import {
-  InjectBot,
-  Start,
-  Update,
-} from 'nestjs-telegraf';
+import { InjectBot, Start, Update } from 'nestjs-telegraf';
 import { Context, Scenes, Telegraf } from 'telegraf';
 import { LoginService } from './login/login.service';
 

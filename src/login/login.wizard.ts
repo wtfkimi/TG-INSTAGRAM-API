@@ -17,7 +17,15 @@ export class LoginWizard {
   @WizardStep(1)
   async saveLogin(@Ctx() ctx: Scenes.WizardContext) {
     await ctx.reply('🔐 <b>Enter your password</b>', { parse_mode: 'HTML' });
-    this.username = ctx.message['text'];
+    if (ctx.message) {
+      this.username = ctx.message['text'];
+    }else {
+      await ctx.reply(
+        '❌ <i>ERROR: please write correct login. Repeat action "Login" to correct login</i>',
+        { parse_mode: 'HTML' },
+      );
+      await ctx.scene.leave();
+    }
     ctx.wizard.next();
   }
 

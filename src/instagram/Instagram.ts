@@ -5,6 +5,7 @@ import { AccountRepositoryLoginResponseLogged_in_user } from 'instagram-private-
 // Id's generated based on seed
 // So if you pass the same value as first argument - the same id's are generated every time
 const ig = new IgApiClient();
+ig.state.proxyUrl = 'http://77.47.247.254:51523'
 export class Instagram {
   static user;
   static state;
@@ -25,7 +26,7 @@ export class Instagram {
         return Instagram.user;
       } else {
         try {
-          Instagram.user = await ig.account.login('tr14.88', '081917vLl*');
+          Instagram.user = await ig.account.login('IllustriousEdward754', 'FUN123');
         } catch (e) {
           console.log(e);
         }

@@ -2,6 +2,14 @@ export const loginInlineKeyboard = [
   [{ text: '📸Add instagram name', callback_data: '/add' }],
   [{ text: '🪧Get names instagram', callback_data: '/show' }],
 ];
+
+export const loginAdminInlineKeyboard = [
+  [{ text: '📸Get accounts in database', callback_data: '/getDbAcc' }],
+  [{ text: '🪧Add accounts in database', callback_data: '/addDbAcc' }],
+  [{ text: '🪧Delete accounts in database', callback_data: '/rmDbAcc' }],
+  [{ text: '🪧Add admin in database', callback_data: '/insertAdminDbAcc' }],
+  [{ text: '🪧Delete admin in database', callback_data: '/removeAdminDbAcc' }],
+];
 export const userAddedKeyboard = (name: string) => {
   return [
     [{ text: '📸Delete user from database', callback_data: `/delete${name}` }],

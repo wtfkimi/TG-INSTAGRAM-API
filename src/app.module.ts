@@ -7,6 +7,12 @@ import { session } from 'telegraf';
 import { LoginService } from './login/login.service';
 import { CrudModule } from './crud/crud.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UsersModule } from './users/users.module';
+import { UsersController } from './users/users.controller';
+import { AccountsModule } from './accounts/accounts.module';
+import { AdminModule } from './admin/admin.module';
+import { AccountsController } from './accounts/accounts.controller';
+import { AdminsModule } from './admins/admins.module';
 
 // const sessions = new LocalSession({database: 'session_db.json'})
 @Module({
@@ -18,10 +24,14 @@ import { MongooseModule } from '@nestjs/mongoose';
     LoginModule,
     CrudModule,
     MongooseModule.forRoot(
-      'mongodb+srv://end1fromearth:081917vLl@cluster0.wopcspp.mongodb.net/?retryWrites=true&w=majority',
+      'mongodb+srv://telegram-api-instagram:gzgANpO4h7PbNlMF@cluster0.wopcspp.mongodb.net/?retryWrites=true&w=majority',
     ),
+    UsersModule,
+    AccountsModule,
+    AdminModule,
+    AdminsModule,
   ],
-  controllers: [],
+  controllers: [UsersController, AccountsController],
   providers: [AppUpdate, AppService, LoginService],
 })
 export class AppModule {}

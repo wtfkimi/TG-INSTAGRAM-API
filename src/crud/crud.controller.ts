@@ -1,12 +1,14 @@
 import { InjectBot, Update, Ctx, Action } from 'nestjs-telegraf';
 import { CrudService } from './crud.service';
 import { Context, Scenes, Telegraf } from 'telegraf';
+import { UsersService } from '../users/users.service';
 
 @Update()
 export class CrudController {
   constructor(
     @InjectBot() private readonly bot: Telegraf<Context>,
     readonly crudService: CrudService,
+    readonly usersService: UsersService,
   ) {}
 
   @Action('/add')
@@ -37,8 +39,8 @@ export class CrudController {
   async generatePost(@Ctx() ctx: Context) {
     const callbackData = ctx.callbackQuery['data'] as String;
     const name = callbackData.match(/\/generatePost(.+)/)[1];
-    const isUserInData = await this.crudService.checkUserInData(name);
-    if (isUserInData === 'USER_NOT_FOUND') {
+    const isUserInData = await this.usersService.getUserByUsername(name);
+    if (isUserInData === null) {
       await this.crudService.sendMessageUserNotInData(ctx);
       return false;
     } else {
@@ -50,8 +52,8 @@ export class CrudController {
   async generatePostNumber(@Ctx() ctx: Scenes.SceneContext) {
     const callbackData = ctx.callbackQuery['data'] as String;
     const name = callbackData.match(/\/postNumber(.+)/)[1];
-    const isUserInData = await this.crudService.checkUserInData(name);
-    if (isUserInData === 'USER_NOT_FOUND') {
+    const isUserInData = await this.usersService.getUserByUsername(name);
+    if (isUserInData === null) {
       await this.crudService.sendMessageUserNotInData(ctx);
       return false;
     } else {
@@ -62,6 +64,7 @@ export class CrudController {
 
   @Action('/channelMsg')
   async channelMsg(@Ctx() ctx: Context) {
+    console.log(ctx.update);
     await this.bot.telegram.sendMessage('-1002069053046', 'test message');
   }
 }
