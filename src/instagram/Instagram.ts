@@ -5,31 +5,26 @@ import { AccountRepositoryLoginResponseLogged_in_user } from 'instagram-private-
 // Id's generated based on seed
 // So if you pass the same value as first argument - the same id's are generated every time
 const ig = new IgApiClient();
-ig.state.proxyUrl = 'http://77.47.247.254:51523';
+
 export class Instagram {
   static user;
   static state;
   static generateState(nameAccount: string) {
-    if (Instagram.state) {
-      return Instagram.state;
-    } else {
-      Instagram.state = ig.state.generateDevice(nameAccount);
-    }
+    Instagram.state = ig.state.generateDevice(nameAccount);
   }
 
   static async login(
     username: string,
     password: string,
+    proxy: string,
   ): Promise<string | AccountRepositoryLoginResponseLogged_in_user> {
     try {
       if (Instagram.user) {
         return Instagram.user;
       } else {
         try {
-          Instagram.user = await ig.account.login(
-            'IllustriousEdward754',
-            'FUN123',
-          );
+          ig.state.proxyUrl = proxy;
+          Instagram.user = await ig.account.login(username, password);
         } catch (e) {
           console.log(e);
         }

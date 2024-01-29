@@ -4,7 +4,6 @@ import { Ctx } from 'nestjs-telegraf';
 import { Context } from 'telegraf';
 import {
   loginAdminInlineKeyboard,
-  loginInlineKeyboard,
 } from '../keyboards/inline_keyboards';
 import { Accounts } from '../accounts/accounts.model';
 import { AdminsService } from '../admins/admins.service';
@@ -52,6 +51,12 @@ export class AdminService {
 
   async deleteDbAcc(@Ctx() ctx: Context, username: string) {
     const account = await this.accountService.deleteAccountByUsername(username);
+    if (account === null) {
+      await ctx.reply('❌ <i>ERROR: account not found</i>', {
+        parse_mode: 'HTML',
+      });
+      return;
+    }
     await ctx.reply(`✅ <i>Account ${account} deleted from database</i>`, {
       parse_mode: 'HTML',
     });

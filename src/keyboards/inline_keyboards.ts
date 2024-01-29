@@ -31,3 +31,13 @@ export function generateKeyboardNames(names: string[]) {
   }
   return keyboard;
 }
+
+export function generateRegisteredUsersKeyboard(username: string, userId: string) {
+  let keyboard = [];
+
+  keyboard.push([
+      { text: `✅️ Add user ${username}`, callback_data: `/acceptRegistration/username${username}/userId${userId}` },
+      { text: `❌ Decline ${username}`, callback_data: `/rejectRegistration/${username}` },
+  ]);
+  return keyboard;
+}

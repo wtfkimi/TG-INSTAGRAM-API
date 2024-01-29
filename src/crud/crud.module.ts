@@ -4,10 +4,11 @@ import { CrudService } from './crud.service';
 import { AddWizard } from './wizards/add.wizard';
 import { GeneratePostNumberWizard } from './wizards/generatePostNumber.wizard';
 import { UsersModule } from '../users/users.module';
+import { AccountsModule } from '../accounts/accounts.module';
 
 @Module({
   controllers: [],
-  imports: [UsersModule],
+  imports: [UsersModule, AccountsModule],
   providers: [CrudService, CrudController, AddWizard, GeneratePostNumberWizard],
 })
 export class CrudModule {}

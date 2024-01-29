@@ -9,6 +9,8 @@ import {
 import { UserFeedResponseItemsItem } from 'instagram-private-api';
 import { PostProcessing } from '../instagram/PostProcessing';
 import { UsersService } from '../users/users.service';
+import { AccountsService } from '../accounts/accounts.service';
+import { Accounts } from '../accounts/accounts.model';
 
 const LOGIN_ERROR = 'ERROR WHILE LOGIN';
 const NO_PICTURE = 'NO_PICTURE';
@@ -18,14 +20,16 @@ const NO_POSTS = 'NO_POSTS';
 export class CrudService {
   data: string[] = [];
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly accountService: AccountsService,
+  ) {}
 
   async checkNameInstagramAndAdd(
     instagramName: string,
     channelId: string,
     @Ctx() ctx: Context,
   ) {
-    Instagram.generateState('tr14.88');
     const users = await this.usersService.getAllUsers();
     const include = users.map((user) => user.username).includes(instagramName);
     const includeChannel = users
@@ -37,7 +41,7 @@ export class CrudService {
       );
       return;
     }
-    const user = await Instagram.login('tr14.88', '081917vLl*');
+    const user = await this.improvedLoginToInstagram(ctx);
 
     if (user === 'ERROR WHILE LOGIN') {
       await ctx.replyWithHTML('❌ <i>ERROR WHILE LOGIN</i>');
@@ -88,6 +92,41 @@ export class CrudService {
     await ctx.answerCbQuery();
   }
 
+  async improvedLoginToInstagram(@Ctx() ctx: Context) {
+    const acc = await this.tookAccountFromDb();
+    let user;
+    let quantityError = 0;
+    if (acc.length === 0) {
+      await ctx.replyWithHTML('❌ <i>ERROR WHILE LOGIN: NO ACCOUNTS</i>');
+      return LOGIN_ERROR;
+    }
+    for (let account of acc) {
+      Instagram.generateState(account.username);
+      user = await Instagram.login(
+        account.username,
+        account.password,
+        account.proxy,
+      );
+      if (user === LOGIN_ERROR) {
+        await ctx.replyWithHTML('❌ <i>ERROR WHILE LOGIN</i>');
+        await this.accountService.updateAccountStatus(
+          account.username,
+          'failed',
+        );
+        if (quantityError === 3) {
+          await ctx.reply(
+            '❌ <i>ERROR WHILE LOGIN: PROBLEM WITH INSTAGRAM ACCOUNT OR PROXY, PLEASE ADD NEW ACCOUNTS</i>',
+          );
+        }
+        quantityError++;
+      }
+      if (user !== LOGIN_ERROR) {
+        return user;
+      }
+    }
+    return LOGIN_ERROR;
+  }
+
   async onProfileActionShow(ctx: Context, name: string) {
     await ctx.sendChatAction('typing');
 
@@ -96,15 +135,8 @@ export class CrudService {
       await this.sendMessageUserNotInData(ctx);
       return;
     }
-    // if (this.data.indexOf(name) === -1) {
-    //   return await this.replyAndAnswer(
-    //     ctx,
-    //     '<i>🚫User not found, please get all users again</i>',
-    //   );
-    // }
 
-    Instagram.generateState('tr14.88');
-    const user = await Instagram.login('', '');
+    const user = await this.improvedLoginToInstagram(ctx);
 
     if (user === LOGIN_ERROR) {
       return await this.replyAndAnswer(ctx, '❌ <i>ERROR WHILE LOGIN</i>');
@@ -139,7 +171,7 @@ export class CrudService {
   ) {
     await ctx.replyWithHTML(message);
     if (needAnswerForCbQuery) {
-      return await ctx.answerCbQuery();
+      // return await ctx.answerCbQuery();
     }
   }
 
@@ -175,9 +207,7 @@ export class CrudService {
       );
     }
 
-    Instagram.generateState('tr14.88');
-    const user = await Instagram.login('tr14.88', '081917vLl*');
-
+    const user = await this.improvedLoginToInstagram(ctx);
     if (user === LOGIN_ERROR) {
       return await this.replyAndAnswer(
         ctx,
@@ -234,5 +264,9 @@ export class CrudService {
       '❌ <i>Probably user was deleted, press Get names instagram</i>',
     );
     await ctx.answerCbQuery();
+  }
+
+  async tookAccountFromDb(): Promise<Accounts[]> {
+    return await this.accountService.getAllWorkingAccounts();
   }
 }

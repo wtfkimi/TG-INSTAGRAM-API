@@ -13,6 +13,7 @@ import { AccountsModule } from './accounts/accounts.module';
 import { AdminModule } from './admin/admin.module';
 import { AccountsController } from './accounts/accounts.controller';
 import { AdminsModule } from './admins/admins.module';
+import { CustomersModule } from './customers/customers.module';
 
 // const sessions = new LocalSession({database: 'session_db.json'})
 @Module({
@@ -30,6 +31,7 @@ import { AdminsModule } from './admins/admins.module';
     AccountsModule,
     AdminModule,
     AdminsModule,
+    CustomersModule,
   ],
   controllers: [UsersController, AccountsController],
   providers: [AppUpdate, AppService, LoginService],

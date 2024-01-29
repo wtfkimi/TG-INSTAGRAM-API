@@ -49,21 +49,22 @@ export class AddAccountWizard {
       await ctx.scene.leave();
     }
     if (json.bulk) {
-      const acs: Accounts[] = [];
-      for (let acc of json) {
+      const acs = json['accounts'] as Accounts[];
+      let acsNew: Accounts[] = [];
+      for (let acc of acs) {
         if (!acc.username || !acc.password || !acc.proxy) {
           await ctx.reply(
             '❌ <i>ERROR: please write correct accounts. Repeat action "Add accounts to database" to correct accounts</i>',
           );
         }
-        acs.push({
+        acsNew.push({
           username: acc.username,
           password: acc.password,
           proxy: acc.proxy,
           status: 'working',
         });
       }
-      await this.adminService.addDbAccBulk(ctx, acs);
+      await this.adminService.addDbAccBulk(ctx, acsNew);
     } else {
       if (!json.username || !json.password || !json.proxy) {
         await ctx.reply(
