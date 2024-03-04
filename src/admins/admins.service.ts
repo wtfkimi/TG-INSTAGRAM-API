@@ -24,9 +24,9 @@ export class AdminsService {
     await newAdmin.save();
   }
 
-  async isAdmin(username: string, userId: string): Promise<boolean> {
+  async isAdmin(username: string): Promise<boolean> {
     const admin = await this.adminModel.findOne({ username: username }).exec();
-    return admin.userId === userId && admin.username === username;
+    return admin !== null;
   }
 
   async getAllAdmins(): Promise<Admins[]> {

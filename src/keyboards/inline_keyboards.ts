@@ -20,7 +20,7 @@ export const userAddedKeyboard = (name: string) => {
         callback_data: `/postNumber${name}`,
       },
     ],
-    [{ text: '🪧Sand msg to channel', callback_data: `/channelMsg` }],
+    [{ text: '🪧Send msg to channel', callback_data: `/channelMsg${name}` }],
   ];
 };
 
@@ -36,8 +36,8 @@ export function generateRegisteredUsersKeyboard(username: string, userId: string
   let keyboard = [];
 
   keyboard.push([
-      { text: `✅️ Add user ${username}`, callback_data: `/acceptRegistration/username${username}/userId${userId}` },
-      { text: `❌ Decline ${username}`, callback_data: `/rejectRegistration/${username}` },
+      { text: `✅️ Add user ${username}`, callback_data: `/acceptRegistration/username:${username}/userId:${userId}` },
+      { text: `❌ Decline ${username}`, callback_data: `/rejectRegistration/username:${username}` },
   ]);
   return keyboard;
 }

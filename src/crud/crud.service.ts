@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Instagram } from '../instagram/Instagram';
-import { Context } from 'telegraf';
-import { Context as Ctx } from 'nestjs-telegraf';
+import { Context, Telegraf } from 'telegraf';
+import { Context as Ctx, InjectBot } from 'nestjs-telegraf';
 import {
   generateKeyboardNames,
   userAddedKeyboard,
@@ -23,6 +23,7 @@ export class CrudService {
   constructor(
     private readonly usersService: UsersService,
     private readonly accountService: AccountsService,
+    @InjectBot() private readonly bot: Telegraf<Context>,
   ) {}
 
   async checkNameInstagramAndAdd(
@@ -196,6 +197,8 @@ export class CrudService {
     name: string,
     postNumber: number = 0,
     needAnswerForCbQuery: boolean = true,
+    sendToGroup: boolean = false,
+    groupId: string = ''
   ) {
     await ctx.sendChatAction('typing');
     const userExist = await this.usersService.getUserByUsername(name);
@@ -240,19 +243,32 @@ export class CrudService {
         caption: `📅<b>${generatedPost.date}</b>\n🔥<i>${generatedPost.desc}</i>🔥`,
         parse_mode: 'HTML',
       };
-      await ctx.replyWithMediaGroup(photo, {});
+      if (sendToGroup) {
+        await this.bot.telegram.sendMediaGroup(groupId, [...photo]);
+      }else {
+        await ctx.replyWithMediaGroup(photo, {});
+      }
       if (needAnswerForCbQuery) {
         await ctx.answerCbQuery();
       }
     } else {
-      await ctx.replyWithMediaGroup([
-        {
-          type: 'photo',
-          media: generatedPost.photo,
-          caption: `📅<b>${generatedPost.date}</b>\n🔥<i>${generatedPost.desc}</i>🔥`,
-          parse_mode: 'HTML',
-        },
-      ]);
+      if (sendToGroup) {
+        await this.bot.telegram.sendMediaGroup(groupId, [{
+            type: 'photo',
+            media: generatedPost.photo,
+            caption: `📅<b>${generatedPost.date}</b>\n🔥<i>${generatedPost.desc}</i>🔥`,
+            parse_mode: 'HTML'
+        }]);
+      }else {
+        await ctx.replyWithMediaGroup([
+          {
+            type: 'photo',
+            media: generatedPost.photo,
+            caption: `📅<b>${generatedPost.date}</b>\n🔥<i>${generatedPost.desc}</i>🔥`,
+            parse_mode: 'HTML',
+          },
+        ]);
+      }
       if (needAnswerForCbQuery) {
         await ctx.answerCbQuery();
       }

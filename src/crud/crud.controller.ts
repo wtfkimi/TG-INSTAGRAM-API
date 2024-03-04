@@ -62,9 +62,18 @@ export class CrudController {
     }
   }
 
-  @Action('/channelMsg')
-  async channelMsg(@Ctx() ctx: Context) {
-    console.log(ctx.update);
-    await this.bot.telegram.sendMessage('-1002069053046', 'test message');
+  @Action(/channelMsg(.+)/)
+  async channelMsg(@Ctx() ctx: Scenes.SceneContext) {
+    const callbackData = ctx.callbackQuery['data'] as String;
+    const name = callbackData.match(/\/channelMsg(.+)/)[1];
+    const isUserInData = await this.usersService.getUserByUsername(name);
+    if (isUserInData === null) {
+      await this.crudService.sendMessageUserNotInData(ctx);
+      return false;
+    }else {
+      ctx.scene.state['name'] = name;
+      ctx.scene.session['group'] = isUserInData.channel;
+      await ctx.scene.enter('/sendPostToGroup');
+    }
   }
 }
