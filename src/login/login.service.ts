@@ -39,7 +39,6 @@ export class LoginService {
 
   }
 
-  //-4164807109 - ADMINS-TELEGRAM
   async userWantRegister(@Ctx() ctx: Context): Promise<void> {
     await this.bot.telegram.sendMessage('-4164807109', '<b>👋 New user want to register</b>', {
       parse_mode: 'HTML',
