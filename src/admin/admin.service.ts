@@ -68,7 +68,7 @@ export class AdminService {
     }
     await ctx.replyWithPhoto({
       source:
-        'C:\\Users\\v.bondariev\\WebstormProjects\\TG-INST\\inst-tg-project\\src\\img\\admin-sticker.png',
+        '',
     });
     await ctx.reply(
       `✅ <b>You are logged in: ${ctx.message.from.username}</b>`,
