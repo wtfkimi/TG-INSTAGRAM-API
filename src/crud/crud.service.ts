@@ -82,7 +82,7 @@ export class CrudService {
     this.data = [];
     await ctx.replyWithPhoto({
       source:
-        'C:\\Users\\v.bondariev\\WebstormProjects\\TG-INST\\inst-tg-project\\src\\img\\users.png',
+        '..',
     });
     await ctx.reply('<i>Users</i>', {
       parse_mode: 'HTML',
