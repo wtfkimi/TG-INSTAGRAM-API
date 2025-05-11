@@ -35,7 +35,7 @@ export class LoginWizard {
     if (this.username == 'admin' && this.password == 'admin') {
       await ctx.replyWithPhoto({
         source:
-          'C:\\Users\\v.bondariev\\WebstormProjects\\TG-INST\\inst-tg-project\\src\\img\\telegram_logo_instagram.png',
+          '',
       });
       await ctx.reply(
         `✅ <b>You are logged in: ${ctx.message.from.username}</b>`,
