@@ -20,12 +20,12 @@ import { CustomersModule } from './customers/customers.module';
   imports: [
     TelegrafModule.forRoot({
       middlewares: [session()],
-      token: '6623959724:AAE-bys8euDD52L-0jNkXw9J3JALsRYWU3Q',
+      token: '',
     }),
     LoginModule,
     CrudModule,
     MongooseModule.forRoot(
-      'mongodb+srv://telegram-api-instagram:gzgANpO4h7PbNlMF@cluster0.wopcspp.mongodb.net/?retryWrites=true&w=majority',
+      '',
     ),
     UsersModule,
     AccountsModule,
